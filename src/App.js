@@ -1,11 +1,24 @@
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { Chartspage } from "./components/Chartspage.tsx";
+
 function App() {
+  const navigate = useNavigate();
+
   const handleButtonClick = () => {
-    window.location.href = `http://${"localhost:3000"}/Chartspage.tsx`; // URL da página de exemplo
+    navigate("/chartspage"); // URL da página de exemplo
   };
+
   return (
     <div className="bg-green-100 h-screen w-screen flex flex-col justify-center items-center">
       <h1 className="text-3xl flex justify-center items-center animate-fade-in mb-2">
-        Hello world!
+        Bem-vindo ao FinanceView
+        {/* <img alt="financeviewlogo" src="./images/financeview.png" /> TODO: fix the image path or something like this*/}
       </h1>
       <button
         onClick={handleButtonClick}
@@ -17,4 +30,15 @@ function App() {
   );
 }
 
-export default App;
+function Main() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/chartspage" element={<Chartspage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default Main;
