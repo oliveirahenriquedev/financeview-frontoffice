@@ -1,2 +1,2 @@
-export * from "./Homepage";
 export * from "./Chartspage";
+export * from "./Sidebar";
