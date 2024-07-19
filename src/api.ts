@@ -7,14 +7,7 @@ type Stock = {
 
 export async function listStocks(): Promise<Stock[]> {
   const response = await fetch(
-    "https://gnxfpkdmjq.us-east-2.awsapprunner.com/stock",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "no-cors",
-    }
+    "https://gnxfpkdmjq.us-east-2.awsapprunner.com/stock"
   );
   const data = await response.json(); // Converte a resposta em JSON
   console.log(data);
@@ -28,8 +21,7 @@ export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
   return response.json();
 }
 
-{
-  /* export async function createUser(body: UserFields) {
+export async function createUser(body: UserFields) {
   try {
     const response = await fetch(
       `https://gnxfpkdmjq.us-east-2.awsapprunner.com/user/register`,
@@ -57,5 +49,4 @@ export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
     console.error("Erro ao criar usuário:", error);
     throw error; // Re-lança o erro para que possa ser tratado externamente
   }
-}*/
 }
