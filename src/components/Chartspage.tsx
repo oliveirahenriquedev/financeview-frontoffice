@@ -72,7 +72,7 @@ export function Chartspage() {
         </div>
       )}
       <div
-        className={`bg-gradient-to-r from-green-300 via-green-200 to-green-100 h-screen w-screen flex flex-col items-center transition-all duration-500`}
+        className={`bg-gradient-to-t from-green-300 via-green-200 to-green-100 h-screen w-screen flex flex-col items-center transition-all duration-500`}
       >
         <CommonText
           text={`Por favor, selecione ${

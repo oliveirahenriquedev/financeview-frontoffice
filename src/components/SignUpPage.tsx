@@ -1,9 +1,11 @@
-import { Box, Card, IconButton } from "@mui/material";
+import { Box, Card, IconButton, useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { useNavigate } from "react-router-dom";
 import { CommonText } from "./CommonText.tsx";
 import { createUser, getUser } from "../api.ts";
+import { Sidebar } from "./Sidebar.tsx";
+import { Header } from "./Header.tsx";
 
 type SignUpPageProps = {
   wantToLogin: boolean;
@@ -56,9 +58,11 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
     }
   }, [registering]);
 
+  const isWideScreen = useMediaQuery("(min-width: 1628px)");
+
   return (
     <Box
-      className="bg-gradient-to-r from-gray-500 via-gray-200 to-gray-100 h-screen w-screen flex flex-col justify-center items-center"
+      className="bg-gradient-to-t from-gray-500 via-gray-300 to-gray-100 h-screen w-screen flex flex-col justify-center items-center"
       sx={{
         padding: 2,
         "@media (max-width: 500px)": {
@@ -66,6 +70,15 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
         },
       }}
     >
+      {isWideScreen ? (
+        <div className="mr-20 flex">
+          <Sidebar />
+        </div>
+      ) : (
+        <div className="w-screen mb-auto -mt-4">
+          <Header />
+        </div>
+      )}
       <Card sx={{ width: { xs: "90%", sm: 500 }, padding: 4 }}>
         <Box className="flex justify-between items-center">
           <CommonText
