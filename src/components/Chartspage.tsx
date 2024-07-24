@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "./Sidebar.tsx";
+import { Header } from "./Header.tsx"; // Certifique-se de que o Header esteja importado
 import { CommonText } from "./CommonText.tsx";
-import { Autocomplete, Switch, TextField } from "@mui/material";
+import { Autocomplete, Switch, TextField, useMediaQuery } from "@mui/material";
 import { useAsyncCallback } from "react-async-hook";
 import { getStocksInfo, listStocks } from "../api.ts";
 import { GetStockResponse } from "../helpers.ts";
@@ -18,6 +19,9 @@ export function Chartspage() {
 
   const [compare, setCompare] = useState<boolean>(false);
   const listStocksAsyncCallback = useAsyncCallback(listStocks);
+
+  const isWideScreen = useMediaQuery("(min-width: 1506px)");
+  const isTallScreen = useMediaQuery("(min-height: 896px)");
 
   useEffect(() => {
     listStocksAsyncCallback.execute();
@@ -57,8 +61,16 @@ export function Chartspage() {
   }, [compare]);
 
   return (
-    <>
-      <Sidebar />
+    <div className="flex flex-col w-screen h-screen overflow-hidden">
+      {isWideScreen && isTallScreen ? (
+        <div className="mr-20">
+          <Sidebar />
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <Header />
+        </div>
+      )}
       <div className="bg-green-100 h-screen w-screen flex flex-col items-center">
         <CommonText
           text={`Por favor, selecione ${
@@ -103,6 +115,7 @@ export function Chartspage() {
                 listStocksAsyncCallback.loading ||
                 !listStocksAsyncCallback.result
               }
+              disabled={!selectedTicker}
               sx={{ width: 200, bgcolor: "white", marginLeft: 4 }}
             />
           )}
@@ -126,9 +139,10 @@ export function Chartspage() {
               tickerId={selectedTicker || ""}
               secondaryTickerId={secondarySelectedTicker}
               isCompairing={compare}
+              displayButton={!isWideScreen || !isTallScreen}
             />
           )}
       </div>
-    </>
+    </div>
   );
 }

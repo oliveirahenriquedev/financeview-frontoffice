@@ -1,9 +1,9 @@
-import { Card } from "@mui/material";
+import { Box, Card, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { CommonText } from "./CommonText.tsx";
-import { createUser } from "../api.ts";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { useNavigate } from "react-router-dom";
+import { CommonText } from "./CommonText.tsx";
+import { createUser, getUser } from "../api.ts";
 
 type SignUpPageProps = {
   wantToLogin: boolean;
@@ -12,15 +12,33 @@ type SignUpPageProps = {
 export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>();
-  const [name, setName] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [registering, setRegistering] = useState<boolean>(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && name && password) {
-      await createUser({ name, email, password });
+
+    if (!registering && email && password) {
+      try {
+        console.log("email:", email, "password:", password);
+        const response = await getUser({ username: email, password });
+        if (response && response < 400) {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+      return;
+    }
+
+    if (registering && email && name && password) {
+      try {
+        await createUser({ name, email, password });
+      } catch (error) {
+        console.error("Error during registration:", error);
+      }
     }
   };
 
@@ -28,31 +46,42 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
     if (wantToLogin) {
       setRegistering(false);
     }
-  }, []);
+  }, [wantToLogin]);
+
+  useEffect(() => {
+    if (registering) {
+      setEmail("");
+      setName("");
+      setPassword("");
+    }
+  }, [registering]);
 
   return (
-    <div className="bg-green-100 h-screen w-screen flex flex-col justify-center items-center">
-      <Card sx={{ width: 500, height: 500 }}>
-        <div className="flex inline-flex justify-center items-center">
-          <button
+    <Box
+      className="bg-green-100 h-screen w-screen flex flex-col justify-center items-center"
+      sx={{
+        padding: 2,
+        "@media (max-width: 500px)": {
+          justifyContent: "flex-start",
+        },
+      }}
+    >
+      <Card sx={{ width: { xs: "90%", sm: 500 }, padding: 4 }}>
+        <Box className="flex justify-between items-center">
+          <CommonText text={registering ? "Registrar" : "Entrar"} />
+          <IconButton
             title="Voltar para a página principal"
             onClick={() => navigate("/")}
           >
-            <HomeRoundedIcon
-              style={{ marginTop: 6, marginLeft: 12 }}
-              color="success"
-            />
-          </button>
-          <CommonText
-            text={registering ? "Registrar" : "Entrar"}
-            style={{ marginTop: 8, marginLeft: 160 }}
-          />
-        </div>
+            <HomeRoundedIcon color="success" />
+          </IconButton>
+        </Box>
         <form className="flex flex-col p-4" onSubmit={handleSubmit}>
           {registering && (
             <label className="flex flex-col mt-2">
               Informe seu nome:
               <input
+                value={name}
                 type="text"
                 className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(e) => setName(e.target.value)}
@@ -62,6 +91,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
           <label className="flex flex-col mt-2">
             Informe seu email:
             <input
+              value={email}
               type="email"
               className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               onChange={(e) => setEmail(e.target.value)}
@@ -70,6 +100,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
           <label className="flex flex-col mt-2">
             Informe sua senha:
             <input
+              value={password}
               type={showPassword ? "text" : "password"}
               className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               onChange={(e) => setPassword(e.target.value)}
@@ -88,7 +119,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
             className="mt-4 p-2 bg-green-500 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             type="submit"
           >
-            Registrar
+            {!registering ? "Entrar" : "Registrar"}
           </button>
           <button
             className={`${
@@ -103,6 +134,6 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
           </button>
         </form>
       </Card>
-    </div>
+    </Box>
   );
 }

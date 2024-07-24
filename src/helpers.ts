@@ -88,3 +88,22 @@ export const tickerFields = [
   { text: "Valor de baixa: ", field: "low" },
   { text: "Volume de transações: ", field: "volume" },
 ];
+
+export const defaultDevsInfo = [
+  {
+    name: "Henrique de Oliveira",
+    imagePath: "images/henrique.jpeg",
+    description:
+      "Phasellus finibus turpis quis lorem varius rutrum. Sed ultrices auctor massa sit amet finibus. Phasellus cursus iaculis orci ac feugiat. Sed ante ligula, elementum quis porttitor sed, fermentum quis neque. Nunc metus turpis, ornare ac dui id, euismod interdum nisl. In nec convallis justo, nec eleifend metus. Ut finibus massa sit amet eros molestie consectetur. Sed sodales egestas ornare. Aliquam erat volutpat. ",
+    linkedinUrl: "https://www.linkedin.com/in/henrique-de-oliveira-c/",
+    githubUrl: "https://github.com/oliveirahenriquedev",
+  },
+  {
+    name: "Mateus Acauhi",
+    imagePath: "/images/acauhiofc.jpeg",
+    description:
+      "Mauris ut purus hendrerit, bibendum augue eget, volutpat metus. Fusce fermentum purus eu ullamcorper pharetra. Pellentesque odio tortor, fermentum id maximus id, tincidunt non enim. Integer iaculis faucibus nisi eget efficitur. Nulla sit amet diam id lectus rutrum hendrerit pharetra tempor purus. Vestibulum sit amet purus ac sapien faucibus eleifend. Mauris auctor accumsan libero, at lobortis nulla.",
+    linkedinUrl: "https://www.linkedin.com/in/acauhi/",
+    githubUrl: "https://github.com/Acauhi99",
+  },
+];
