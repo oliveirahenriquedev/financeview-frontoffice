@@ -32,7 +32,7 @@ export function AboutUs() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-r from-gray-500 via-gray-200 to-gray-100 overflow-hidden">
       {isWideScreen ? (
         <div className="mr-20 flex">
           <Sidebar />
@@ -43,7 +43,7 @@ export function AboutUs() {
         </div>
       )}
       <div
-        className={`bg-gray-100 flex ${
+        className={`bg-gradient-to-r from-gray-500 via-gray-200 to-gray-100 flex ${
           isSmallScreen ? "flex-col items-center" : "flex-row justify-center"
         }`}
       >

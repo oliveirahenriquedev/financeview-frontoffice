@@ -1,19 +1,14 @@
 import React, { useEffect } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { getUser } from "../api.ts";
+import { getCurrentUserName } from "../helpers.ts";
 
 type SignInSidebarButton = {
   isSignedIn?: boolean;
 };
 
 export function SignInSidebarButton({ isSignedIn }: SignInSidebarButton) {
-  {
-    /*const userInfoAsyncCallback = useAsyncCallback(getUser);
-
-  useEffect(() => {
-    userInfoAsyncCallback.execute();
-  }, []); */
-  }
+  const username = getCurrentUserName();
 
   return (
     <a
@@ -58,10 +53,12 @@ export function SignInSidebarButton({ isSignedIn }: SignInSidebarButton) {
                 d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
               />
             </svg>
-            <span className="flex-1 ms-3 whitespace-nowrap">Olá, {}</span>
+            <span className="flex-1 ms-3 whitespace-nowrap ">
+              Olá, {username ?? "visitante"}!
+            </span>
           </div>
           <span className="text-sm text-gray-500 dark:text-gray-400 ms-8">
-            Clique aqui para entrar
+            Clique aqui {username ? "para acessar sua conta" : "para entrar"}
           </span>
         </div>
       )}

@@ -14,85 +14,27 @@ import { AboutUs } from "./components/AboutUs.tsx";
 import { Header } from "./components/Header.tsx";
 
 function App() {
-  const [surfingWithoutAccount, setSurfingWithoutAccount] = useState(false);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/chartspage"); // URL da página de exemplo
   };
 
-  const feedbacks = [
-    "Amei a interface do FinanceView!",
-    "As atualizações diárias são super úteis.",
-    "Excelente plataforma para acompanhar ações.",
-    "FinanceView tornou minha vida financeira muito mais fácil.",
-  ];
-
-  function FeedbackCarousel() {
-    return (
-      <Carousel
-        showArrows={false}
-        autoPlay
-        infiniteLoop
-        showStatus={false}
-        showIndicators={false}
-        interval={5000}
-        className="animate-fade-in"
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "300px",
-          "& .control-arrow": {
-            "&::before": {
-              fontSize: "2rem",
-              color: "#333",
-            },
-          },
-          "& .carousel .slide": {
-            backgroundColor: "transparent",
-          },
-        }}
-      >
-        {feedbacks.map((feedback, index) => (
-          <div key={index} className="p-4 flex items-center justify-center">
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
-              <div className="flex items-center mb-4">
-                <Avatar className="mb-2" />
-                <p className="ml-4 mt-2 font-semibold">Nome</p>
-              </div>
-              <p className="text-lg font-semibold text-center mb-4">
-                {feedback}
-              </p>
-              <Rating
-                sx={{ marginLeft: -1.5 }}
-                name="read-only"
-                value={4}
-                readOnly
-                className="mb-2"
-              />
-              {/* TODO: Ajustar esse value para ser o valor do rating do usuário na API, implementar lógica para mostrar apenas valores > 4 */}
-            </div>
-          </div>
-        ))}
-      </Carousel>
-    );
-  }
-
   return (
     <div>
-      <div className="relative min-h-screen flex flex-col md:flex-row justify-center p-4 bg-green-100">
-        <div className="absolute inset-0 bg-chart-pattern bg-cover bg-center opacity-10"></div>
-        <Card className="relative z-10 p-6 bg-white shadow-md rounded-lg w-full md:w-1/2 lg:w-1/3 h-[480px] flex flex-col md:mb-0 md:ml-24 lg:mt-64 md:mt-64 ml-auto">
+      <div className="relative min-h-screen flex flex-col md:flex-row justify-center align-center p-4 bg-black">
+        <div className="absolute inset-0 bg-chart-pattern-3 bg-cover bg-center opacity-25 blur"></div>
+        <Card className="relative z-10 p-6 bg-white shadow-md rounded-lg w-full md:w-1/2 lg:w-1/3 xl:h-[380px] lg:h-[400px] sm:h-[350px] md:min-h-[500px] flex flex-col md:mb-0 md:ml-24 lg:mt-64 md:mt-64 mr-20">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center animate-fade-in mb-4 font-astonpoliz">
             Boas-vindas ao <span className="text-yellow-500">FinanceView</span>
           </h1>
           <p className="flex justify-center text-sm sm:text-base md:text-lg lg:text-xl text-center animate-fade-in mb-4 font-astonpoliz w-full">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac
-            efficitur arcu. Nam sit amet nulla vestibulum, condimentum purus
-            vitae, tincidunt dui. Phasellus pharetra accumsan orci et molestie.
-            Praesent porttitor sagittis ultricies. Nulla pulvinar ut elit eget
-            posuere.
+            Veja com facilidade a movimentação das maiores ações do mundo.{" "}
+            <br />
+            Compare ações.
+            <br />
+            <br />
+            Mergulhe de vez no mundo financeiro.
           </p>
           <button
             onClick={handleButtonClick}
@@ -106,7 +48,7 @@ function App() {
           >
             <button onClick={() => navigate("/signup")}>
               <p className="mr-2 text-teal-700 animate-fade-in">
-                Quero me registrar
+                Área de Login
               </p>
             </button>
             <button onClick={() => navigate("/aboutus")}>

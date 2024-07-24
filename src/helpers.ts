@@ -93,8 +93,7 @@ export const defaultDevsInfo = [
   {
     name: "Henrique de Oliveira",
     imagePath: "images/henrique.jpeg",
-    description:
-      "Phasellus finibus turpis quis lorem varius rutrum. Sed ultrices auctor massa sit amet finibus. Phasellus cursus iaculis orci ac feugiat. Sed ante ligula, elementum quis porttitor sed, fermentum quis neque. Nunc metus turpis, ornare ac dui id, euismod interdum nisl. In nec convallis justo, nec eleifend metus. Ut finibus massa sit amet eros molestie consectetur. Sed sodales egestas ornare. Aliquam erat volutpat. ",
+    description: `"Sempre fui apaixonado por código. Desde criança sempre estive muito ligado ao código então sempre soube que era a área que eu gostaria de seguir. No FinanceView, fiquei responsável pela parte visual do projeto, prosseguindo com os padrões de código e usabilidade como prioridade. Além disso, auxiliei o Mateus em alguns pontos da arquitetura do software, entendendo quais boas práticas utilizaríamos no escopo, mantendo o foco em um fluxo correto e coeso."`,
     linkedinUrl: "https://www.linkedin.com/in/henrique-de-oliveira-c/",
     githubUrl: "https://github.com/oliveirahenriquedev",
   },
@@ -107,3 +106,7 @@ export const defaultDevsInfo = [
     githubUrl: "https://github.com/Acauhi99",
   },
 ];
+
+export function getCurrentUserName() {
+  return localStorage.getItem("username");
+}

@@ -58,7 +58,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
 
   return (
     <Box
-      className="bg-green-100 h-screen w-screen flex flex-col justify-center items-center"
+      className="bg-gradient-to-r from-gray-500 via-gray-200 to-gray-100 h-screen w-screen flex flex-col justify-center items-center"
       sx={{
         padding: 2,
         "@media (max-width: 500px)": {
@@ -68,7 +68,10 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
     >
       <Card sx={{ width: { xs: "90%", sm: 500 }, padding: 4 }}>
         <Box className="flex justify-between items-center">
-          <CommonText text={registering ? "Registrar" : "Entrar"} />
+          <CommonText
+            text={registering ? "Registrar" : "Entrar"}
+            style={{ marginLeft: 14 }}
+          />
           <IconButton
             title="Voltar para a página principal"
             onClick={() => navigate("/")}

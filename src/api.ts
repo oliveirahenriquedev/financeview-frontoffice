@@ -7,7 +7,7 @@ type Stock = {
 
 export async function listStocks(): Promise<Stock[]> {
   const response = await fetch(
-    "https://wg2bvjgjwg.us-east-2.awsapprunner.com/stock"
+    "https://cxnv7rnab4.us-east-2.awsapprunner.com/stock"
   );
   const data = await response.json(); // Converte a resposta em JSON
   console.log(data);
@@ -16,7 +16,7 @@ export async function listStocks(): Promise<Stock[]> {
 
 export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
   const response = await fetch(
-    `https://wg2bvjgjwg.us-east-2.awsapprunner.com/stock/${ticker}`
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/stock/${ticker}`
   );
   return response.json();
 }
@@ -24,7 +24,7 @@ export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
 export async function createUser(body: UserFields) {
   try {
     const response = await fetch(
-      `https://wg2bvjgjwg.us-east-2.awsapprunner.com/user/register`,
+      `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/register`,
       {
         method: "POST",
         headers: {
@@ -58,7 +58,7 @@ export async function getUser(body: { username: string; password: string }) {
     formBody.append("password", body.password);
 
     const response = await fetch(
-      `https://wg2bvjgjwg.us-east-2.awsapprunner.com/user/login`,
+      `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/login`,
       {
         method: "POST",
         headers: {
@@ -92,7 +92,7 @@ export async function sendReview(body: {
   rating: number;
 }) {
   try {
-    await fetch(`https://wg2bvjgjwg.us-east-2.awsapprunner.com/user/feedback`, {
+    await fetch(`https://cxnv7rnab4.us-east-2.awsapprunner.com/user/feedback`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

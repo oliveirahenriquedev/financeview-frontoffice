@@ -71,12 +71,14 @@ export function Chartspage() {
           <Header />
         </div>
       )}
-      <div className="bg-green-100 h-screen w-screen flex flex-col items-center">
+      <div
+        className={`bg-gradient-to-r from-green-300 via-green-200 to-green-100 h-screen w-screen flex flex-col items-center transition-all duration-500`}
+      >
         <CommonText
           text={`Por favor, selecione ${
             compare ? "ações" : "alguma ação"
           } para ver as métricas: `}
-          style={{ marginTop: "80px" }}
+          style={{ marginTop: "80px", paddingLeft: 10, paddingRight: 10 }}
           hasAnimation
         />
         <div style={{ display: "inline-flex" }}>
@@ -96,7 +98,10 @@ export function Chartspage() {
               listStocksAsyncCallback.loading || !listStocksAsyncCallback.result
             }
             disableClearable={!!secondarySelectedTicker}
-            sx={{ width: compare ? 200 : 400, bgcolor: "white" }}
+            sx={{
+              width: compare && isTallScreen ? 150 : isTallScreen ? 150 : 200,
+              bgcolor: "white",
+            }}
           />
           {compare && (
             <Autocomplete
@@ -116,7 +121,11 @@ export function Chartspage() {
                 !listStocksAsyncCallback.result
               }
               disabled={!selectedTicker}
-              sx={{ width: 200, bgcolor: "white", marginLeft: 4 }}
+              sx={{
+                width: isTallScreen ? 150 : 200,
+                bgcolor: "white",
+                marginLeft: 4,
+              }}
             />
           )}
         </div>
