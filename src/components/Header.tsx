@@ -12,10 +12,19 @@ import HomeIcon from "@mui/icons-material/Home";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import LoginIcon from "@mui/icons-material/Login";
 import InfoIcon from "@mui/icons-material/Info";
-import { getCurrentUserName } from "../helpers.ts";
+import { getCurrentUserData, TokenManager } from "../helpers.ts";
+import { jwtDecode } from "jwt-decode";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export function Header() {
-  const username = getCurrentUserName();
+  const tokenManager = new TokenManager();
+
+  let user;
+  if (tokenManager.getCurrentToken()) {
+    user = jwtDecode(tokenManager.getCurrentToken() || "");
+  } else {
+    user = null;
+  }
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
@@ -92,15 +101,15 @@ export function Header() {
       text: (
         <div className="flex flex-col">
           <span className="flex-1 ms-3 whitespace-nowrap">
-            Olá, {username ?? "visitante"}!
+            Olá, {user ? user.name : "visitante"}!
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400 ms-3">
-            Clique aqui {username ? "para acessar sua conta" : "para entrar"}
+            Clique aqui {user ? "para acessar sua conta" : "para entrar"}
           </span>
         </div>
       ),
-      href: `${username ? "/account" : "/signup"}`,
-      icon: <LoginIcon />,
+      href: `${user ? "/account" : "/signup"}`,
+      icon: user ? <AccountCircleIcon /> : <LoginIcon />,
     },
   ];
 

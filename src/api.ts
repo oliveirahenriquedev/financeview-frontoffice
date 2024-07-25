@@ -1,17 +1,18 @@
-import { GetStockResponse, UserFields } from "./helpers";
+import { GetStockResponse, TokenManager, UserFields } from "./helpers.ts";
 
 type Stock = {
   ticker: string;
   id: string;
 };
 
+const tokenManager = new TokenManager();
+
 export async function listStocks(): Promise<Stock[]> {
   const response = await fetch(
     "https://cxnv7rnab4.us-east-2.awsapprunner.com/stock"
   );
-  const data = await response.json(); // Converte a resposta em JSON
-  console.log(data);
-  return data; // Retorna os dados convertidos
+  const data = await response.json();
+  return data;
 }
 
 export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
@@ -35,16 +36,8 @@ export async function createUser(body: UserFields) {
       }
     );
 
-    // Verifica se a resposta foi bem-sucedida
-    if (!response.ok) {
-      const errorData = await response.json(); // Obtém os dados de erro
-      throw new Error(`Error ${response.status}: ${errorData.detail[0].msg}`); // Lança um erro com a mensagem do servidor
-    }
-
     // Converte a resposta em JSON
-    const data = await response.json();
-    console.log("Usuário criado com sucesso!", data);
-    return data; // Retorna os dados da resposta
+    return response;
   } catch (error) {
     console.error("Erro ao criar usuário:", error);
     throw error; // Re-lança o erro para que possa ser tratado externamente
@@ -76,28 +69,28 @@ export async function getUser(body: { username: string; password: string }) {
     }
 
     const responseData = await response.json();
-    localStorage.setItem(
-      "accessToken",
-      responseData.data.user_data.access_token
-    );
-    localStorage.setItem("userData", responseData.data.user_data);
-  } catch (error) {
-    console.log("error > ", error);
-  }
+    tokenManager.setCurrentToken(responseData.access_token);
+  } catch (error) {}
 }
 
 export async function sendReview(body: {
-  userId: string;
+  user_id: number;
   description: string;
   rating: number;
+  token: string | null;
 }) {
   try {
     await fetch(`https://cxnv7rnab4.us-east-2.awsapprunner.com/user/feedback`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${body.token}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, token: undefined }),
     });
-  } catch (error) {}
+
+    console.log("Sucesso!");
+  } catch (error) {
+    console.error("Erro ao enviar feedback", error);
+  }
 }

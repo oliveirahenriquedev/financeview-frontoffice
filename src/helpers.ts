@@ -100,13 +100,24 @@ export const defaultDevsInfo = [
   {
     name: "Mateus Acauhi",
     imagePath: "/images/acauhiofc.jpeg",
-    description:
-      "Mauris ut purus hendrerit, bibendum augue eget, volutpat metus. Fusce fermentum purus eu ullamcorper pharetra. Pellentesque odio tortor, fermentum id maximus id, tincidunt non enim. Integer iaculis faucibus nisi eget efficitur. Nulla sit amet diam id lectus rutrum hendrerit pharetra tempor purus. Vestibulum sit amet purus ac sapien faucibus eleifend. Mauris auctor accumsan libero, at lobortis nulla.",
+    description: `"Entusiasta de tecnologia, sou um grande apreciador do back-end, bancos de dados e da infraestrutura por trás de aplicações. Entregar o melhor resultado dentro do prazo, com um código organizado, manutenível e testável, é minha meta. Resolver problemas é meu passatempo, independentemente da linguagem, paradigma ou arquitetura.
+
+Durante o desenvolvimento do FinanceView, ter uma comunicação objetiva e constante com o Henrique foi crucial para manter um bom ambiente de trabalho."`,
     linkedinUrl: "https://www.linkedin.com/in/acauhi/",
     githubUrl: "https://github.com/Acauhi99",
   },
 ];
 
-export function getCurrentUserName() {
-  return localStorage.getItem("username");
+export function getCurrentUserData() {
+  return localStorage.getItem("userdata");
+}
+
+export class TokenManager {
+  getCurrentToken() {
+    return localStorage.getItem("accessToken");
+  }
+
+  setCurrentToken(token: string) {
+    return localStorage.setItem("accessToken", token);
+  }
 }

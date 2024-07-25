@@ -37,7 +37,12 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
 
     if (registering && email && name && password) {
       try {
-        await createUser({ name, email, password });
+        const response = await createUser({ name, email, password });
+
+        if (response.ok) {
+          await getUser({ username: email, password });
+          navigate("/");
+        }
       } catch (error) {
         console.error("Error during registration:", error);
       }

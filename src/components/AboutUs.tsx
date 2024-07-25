@@ -2,12 +2,15 @@ import { Avatar, Card, Rating, useMediaQuery } from "@mui/material";
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { useNavigate } from "react-router-dom";
-import { defaultDevsInfo } from "../helpers.ts";
+import { defaultDevsInfo, TokenManager } from "../helpers.ts";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
-import { sendReview } from "../api.ts";
+import { getUser, sendReview } from "../api.ts";
+import { jwtDecode } from "jwt-decode";
+
+const tokenManager = new TokenManager();
 
 export function AboutUs() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,12 +24,15 @@ export function AboutUs() {
   const isSmallScreen = useMediaQuery("(max-width: 1200px)");
 
   const handleSendReview = async () => {
-    if (description && selectedRating) {
+    const user = jwtDecode(tokenManager.getCurrentToken() || "") as any;
+    if (description && selectedRating && user) {
+      console.log(user);
       setLoading(true);
       await sendReview({
-        userId: "",
+        user_id: user.user_id,
         description,
         rating: selectedRating,
+        token: tokenManager.getCurrentToken(),
       }).then(() => setLoading(false));
     }
   };

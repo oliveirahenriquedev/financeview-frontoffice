@@ -12,6 +12,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Importa o CSS da biblioteca
 import { AboutUs } from "./components/AboutUs.tsx";
 import { Header } from "./components/Header.tsx";
+import { AccountSettings } from "./components/AccountSettings.tsx";
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ function Main() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/signin" element={<SignUpPage wantToLogin />} />
         <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/account" element={<AccountSettings />} />
       </Routes>
     </Router>
   );
