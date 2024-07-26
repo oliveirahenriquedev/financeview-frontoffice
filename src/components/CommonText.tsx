@@ -10,7 +10,7 @@ export function CommonText({ text, style, hasAnimation }: CommonTextProps) {
   return (
     <h1
       className={`text-3xl flex justify-center items-center ${
-        hasAnimation && "animate-fade-in"
+        hasAnimation && "animate-slide-in-up"
       } mb-2`}
       style={style}
     >

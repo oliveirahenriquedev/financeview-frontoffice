@@ -23,25 +23,24 @@ export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
 }
 
 export async function createUser(body: UserFields) {
-  try {
-    const response = await fetch(
-      `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Adiciona o header para JSON
-        },
-        body: JSON.stringify(body), // Converte o corpo para JSON
-        mode: "cors", // Define o modo como 'cors'
-      }
-    );
+  const response = await fetch(
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Adiciona o header para JSON
+      },
+      body: JSON.stringify(body), // Converte o corpo para JSON
+      mode: "cors", // Define o modo como 'cors'
+    }
+  );
 
-    // Converte a resposta em JSON
-    return response;
-  } catch (error) {
-    console.error("Erro ao criar usuário:", error);
-    throw error; // Re-lança o erro para que possa ser tratado externamente
+  if (!response.ok) {
+    return response.status;
   }
+
+  // Converte a resposta em JSON
+  return response;
 }
 
 export async function getUser(body: { username: string; password: string }) {
@@ -73,24 +72,56 @@ export async function getUser(body: { username: string; password: string }) {
   } catch (error) {}
 }
 
-export async function sendReview(body: {
-  user_id: number;
-  description: string;
-  rating: number;
-  token: string | null;
-}) {
-  try {
-    await fetch(`https://cxnv7rnab4.us-east-2.awsapprunner.com/user/feedback`, {
+export async function sendReview(
+  body: {
+    user_id: number;
+    description: string;
+    rating: number;
+  },
+  token: string | null
+) {
+  const response = await fetch(
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/feedback`,
+    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${body.token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ ...body, token: undefined }),
-    });
+    }
+  );
 
-    console.log("Sucesso!");
-  } catch (error) {
-    console.error("Erro ao enviar feedback", error);
+  if (!response.ok) {
+    return response.status;
   }
+}
+
+export async function putUserInfo(
+  userId: string,
+  body: {
+    name: string;
+    email: string;
+    url_image: string | ArrayBuffer | null;
+  },
+  token: string | null
+) {
+  const response = await fetch(
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/update/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    }
+  );
+
+  if (!response.ok) {
+    return response.status;
+  }
+
+  const responseData = await response.json();
+  tokenManager.setCurrentToken(responseData.access_token);
 }

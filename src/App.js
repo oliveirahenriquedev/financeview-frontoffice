@@ -8,13 +8,18 @@ import {
 import { Avatar, Card, Rating } from "@mui/material";
 import { Chartspage } from "./components/Chartspage.tsx";
 import { SignUpPage } from "./components/SignUpPage.tsx";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Importa o CSS da biblioteca
 import { AboutUs } from "./components/AboutUs.tsx";
-import { Header } from "./components/Header.tsx";
 import { AccountSettings } from "./components/AccountSettings.tsx";
+import { TokenManager } from "./helpers.ts";
+import { jwtDecode } from "jwt-decode";
 
+const tokenManager = new TokenManager();
 function App() {
+  let user = undefined;
+  if (tokenManager.getCurrentToken()) {
+    user = jwtDecode(tokenManager.getCurrentToken());
+  }
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -47,9 +52,9 @@ function App() {
             className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full"
             style={{ justifyContent: "space-between" }}
           >
-            <button onClick={() => navigate("/signup")}>
+            <button onClick={() => navigate(user ? "/account" : "/signup")}>
               <p className="mr-2 text-teal-700 animate-fade-in">
-                Área de Login
+                {user ? "Minha conta" : "Área de Login"}
               </p>
             </button>
             <button onClick={() => navigate("/aboutus")}>
@@ -78,12 +83,3 @@ function Main() {
 }
 
 export default Main;
-
-{
-  /*<Card
-          className="relative shadow-md rounded-lg md:w-1/2 lg:w-1/3 flex flex-col md:ml-8 lg:ml-12 mt-8 md:mt-72 mx-auto max-w-[350px] opacity-80"
-          sx={{ marginLeft: "auto" }}
-        >
-          <FeedbackCarousel />
-        </Card> */
-}

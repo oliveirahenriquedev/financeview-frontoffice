@@ -5,7 +5,7 @@ import { CommonText } from "./CommonText.tsx";
 import { Autocomplete, Switch, TextField, useMediaQuery } from "@mui/material";
 import { useAsyncCallback } from "react-async-hook";
 import { getStocksInfo, listStocks } from "../api.ts";
-import { GetStockResponse } from "../helpers.ts";
+import { GetStockResponse, setDelay } from "../helpers.ts";
 import { Chart } from "./Chart.tsx";
 
 export function Chartspage() {
@@ -18,6 +18,7 @@ export function Chartspage() {
     useState<GetStockResponse>();
 
   const [compare, setCompare] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const listStocksAsyncCallback = useAsyncCallback(listStocks);
 
   const isWideScreen = useMediaQuery("(min-width: 1506px)");
@@ -28,13 +29,16 @@ export function Chartspage() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     if (selectedTicker === "") {
       setSelectedTicker(undefined);
+      setLoading(false);
     }
 
     if (selectedTicker) {
       async function fetchData() {
         setStocksInfo(await getStocksInfo(selectedTicker || ""));
+        setLoading(false);
       }
       fetchData();
     }
@@ -72,7 +76,7 @@ export function Chartspage() {
         </div>
       )}
       <div
-        className={`bg-gradient-to-t from-green-300 via-green-200 to-green-100 h-screen w-screen flex flex-col items-center transition-all duration-500`}
+        className={`bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col items-center transition-all duration-500`}
       >
         <CommonText
           text={`Por favor, selecione ${
@@ -81,7 +85,7 @@ export function Chartspage() {
           style={{ marginTop: "80px", paddingLeft: 10, paddingRight: 10 }}
           hasAnimation
         />
-        <div style={{ display: "inline-flex" }}>
+        <div style={{ display: "inline-flex" }} className="animate-slide-in-up">
           <Autocomplete
             options={
               listStocksAsyncCallback.result
@@ -129,7 +133,8 @@ export function Chartspage() {
             />
           )}
         </div>
-        <div style={{ display: "inline-flex" }}>
+
+        <div style={{ display: "inline-flex" }} className="animate-slide-in-up">
           <CommonText
             text="Quero comparar ações"
             style={{ fontSize: "20px", marginRight: "8px" }}
@@ -139,9 +144,42 @@ export function Chartspage() {
             color={compare ? "success" : "info"}
           />
         </div>
-        {(selectedTicker || secondarySelectedTicker) &&
+        {loading && isWideScreen && selectedTicker ? (
+          <div className="w-full max-w-[1000px] h-[1200px] border-2 rounded-lg mt-6 p-8 bg-white mb-[220px]">
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className="flex justify-between mb-4">
+                <div className="w-32 h-8 bg-gray-300 rounded-md animate-pulse"></div>
+                <div className="w-20 h-8 bg-gray-300 rounded-md animate-pulse"></div>
+              </div>
+              {/* Y-Axis */}
+              <div className="flex h-full">
+                <div className="flex flex-col justify-between">
+                  {[...Array(6)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-8 h-4 bg-gray-300 rounded-md animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+                {/* Bars */}
+                <div className="flex-1 flex items-end justify-between pl-4">
+                  {[...Array(10)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-8 bg-gray-300 rounded-md animate-pulse"
+                      style={{ height: `${Math.random() * 60 + 20}%` }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          (selectedTicker || secondarySelectedTicker) &&
           stocksInfo &&
-          stocksInfo.results && (
+          stocksInfo.results &&
+          !loading && (
             <Chart
               stock={stocksInfo.results[0]}
               secondaryStock={secondaryStocksInfo?.results[0]}
@@ -150,7 +188,8 @@ export function Chartspage() {
               isCompairing={compare}
               displayButton={!isWideScreen || !isTallScreen}
             />
-          )}
+          )
+        )}
       </div>
     </div>
   );

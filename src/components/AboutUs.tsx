@@ -1,44 +1,79 @@
-import { Avatar, Card, Rating, useMediaQuery } from "@mui/material";
 import React, { useState } from "react";
+import {
+  Avatar,
+  Box,
+  Card,
+  Dialog,
+  Rating,
+  useMediaQuery,
+} from "@mui/material";
 import { Carousel } from "react-responsive-carousel";
-import { useNavigate } from "react-router-dom";
-import { defaultDevsInfo, TokenManager } from "../helpers.ts";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
-import { getUser, sendReview } from "../api.ts";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import { defaultDevsInfo, TokenManager } from "../helpers.ts";
+import { sendReview } from "../api.ts";
 import { jwtDecode } from "jwt-decode";
+import { ErrorDialog } from "./ErrorDialog.tsx";
+import { NotAuthenticatedDialog } from "./NotAuthenticatedDialog.tsx";
+import { useNavigate } from "react-router-dom";
 
 const tokenManager = new TokenManager();
 
-export function AboutUs() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const [description, setDescription] = useState<string>();
+const reviewSchema = z.object({
+  rating: z.string().min(0.5, "Selecione uma avaliação"),
+  description: z.string().min(1, "A descrição deve estar preenchida."),
+});
 
+export function AboutUs() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [notAuthenticated, setNotAuthenticated] = useState<boolean>(false);
   const isWideScreen = useMediaQuery("(min-width: 1628px)");
   const isMediumScreen = useMediaQuery(
     "(min-width: 1201px) and (max-width: 1627px)"
   );
   const isSmallScreen = useMediaQuery("(max-width: 1200px)");
 
-  const handleSendReview = async () => {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(reviewSchema),
+  });
+
+  const onSubmit = async (data) => {
+    if (!tokenManager.getCurrentToken()) {
+      setNotAuthenticated(true);
+      return;
+    }
     const user = jwtDecode(tokenManager.getCurrentToken() || "") as any;
-    if (description && selectedRating && user) {
-      console.log(user);
+    if (user) {
       setLoading(true);
-      await sendReview({
-        user_id: user.user_id,
-        description,
-        rating: selectedRating,
-        token: tokenManager.getCurrentToken(),
-      }).then(() => setLoading(false));
+      const response = await sendReview(
+        {
+          user_id: user.user_id,
+          description: data.description,
+          rating: data.rating,
+        },
+        tokenManager.getCurrentToken()
+      );
+
+      if (response && response < 400) {
+        setHasError(true);
+      }
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-500 overflow-hidden">
+    <div className="min-h-screen bg-black overflow-hidden">
       {isWideScreen ? (
         <div className="mr-20 flex">
           <Sidebar />
@@ -49,7 +84,7 @@ export function AboutUs() {
         </div>
       )}
       <div
-        className={`bg-gradient-to-t from-gray-500 via-gray-300 to-gray-100 flex ${
+        className={`bg-gradient-to-b from-white to-black flex ${
           isSmallScreen ? "flex-col items-center" : "flex-row justify-center"
         }`}
       >
@@ -84,39 +119,68 @@ export function AboutUs() {
             a democratizar o conhecimento financeiro, tornando-o acessível para
             todos.
           </p>
-          <div className="flex justify-center align-center p-2 ml-2">
-            <p>
-              Envie uma avaliação! Seu feedback nos ajuda a melhorar o sistema
-            </p>
-          </div>
-          <div className="flex justify-center align-center">
-            <Rating
-              value={selectedRating}
-              onChange={(_e, newValue) => setSelectedRating(newValue)}
-              precision={0.5}
-            />
-          </div>
-          {selectedRating !== null && (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex justify-center align-center p-2 ml-2">
+              <p>
+                Envie uma avaliação! Seu feedback nos ajuda a melhorar o sistema
+              </p>
+            </div>
+            <div className="flex justify-center align-center">
+              <Controller
+                name="rating"
+                control={control}
+                render={({ field }) => (
+                  <Rating {...field} precision={0.5} disabled={loading} />
+                )}
+              />
+            </div>
+            {errors.rating && (
+              <p className="text-red-500 text-center mt-2">
+                <>{errors.rating.message}</>
+              </p>
+            )}
             <div>
-              <label className="flex flex-col mt-2 p-4 ">
+              <label className="flex flex-col mt-2 p-4">
                 Diga um pouco mais da sua experiência
-                <textarea
-                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black resize-none"
-                  rows={6}
-                  placeholder="Digite aqui..."
-                  onChange={(e) => setDescription(e.target.value)}
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field }) => (
+                    <textarea
+                      {...field}
+                      className={`mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black resize-none ${
+                        errors.description &&
+                        "border-red-500 focus:ring-red-500"
+                      }`}
+                      rows={6}
+                      placeholder="Digite aqui..."
+                      disabled={loading}
+                    />
+                  )}
                 />
               </label>
-              <button
-                className="flex float-right p-4 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br focus:ring-black dark:focus:ring-indigo-800 rounded-lg text-sm px-5 mb-2 mr-4 text-center text-black font-semibold"
-                onClick={handleSendReview}
-                disabled={loading}
-                color={loading ? "gray" : undefined}
-              >
-                Enviar avaliação
-              </button>
+              {errors.description && (
+                <p className="text-red-500 text-center mt-2">
+                  <>{errors.description.message}</>
+                </p>
+              )}
+              {loading ? (
+                <div className="flex mr-4 mt-2 mb-4 float-right">
+                  <div className="w-8 h-8 rounded-full absolute border-8 border-solid border-gray-200"></div>
+                  <div className="w-8 h-8 rounded-full animate-spin border-8 border-solid border-green-500 border-t-transparent shadow-md"></div>
+                </div>
+              ) : (
+                <button
+                  className="flex bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border-b-4 border-green-700 rounded transform transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 mt-4 float-right mb-4 mr-4"
+                  type="submit"
+                  disabled={loading}
+                  color={loading ? "gray" : undefined}
+                >
+                  Enviar avaliação
+                </button>
+              )}
             </div>
-          )}
+          </form>
         </Card>
         <Card
           sx={{
@@ -182,6 +246,19 @@ export function AboutUs() {
           </Carousel>
         </Card>
       </div>
+      {hasError && (
+        <ErrorDialog open={hasError} onClick={() => setHasError(false)} />
+      )}
+      {notAuthenticated && (
+        <NotAuthenticatedDialog
+          open={notAuthenticated}
+          onClose={() => setNotAuthenticated(false)}
+          navigate={(path) => {
+            setNotAuthenticated(false);
+            navigate(path);
+          }}
+        />
+      )}
     </div>
   );
 }

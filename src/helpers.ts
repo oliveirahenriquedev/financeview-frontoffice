@@ -120,4 +120,10 @@ export class TokenManager {
   setCurrentToken(token: string) {
     return localStorage.setItem("accessToken", token);
   }
+
+  removeCurrentToken() {
+    return localStorage.removeItem("accessToken");
+  }
 }
+
+export const setDelay = (ms) => new Promise((res) => setTimeout(res, ms));

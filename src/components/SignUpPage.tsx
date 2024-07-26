@@ -6,46 +6,90 @@ import { CommonText } from "./CommonText.tsx";
 import { createUser, getUser } from "../api.ts";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
+import { setDelay } from "../helpers.ts";
+import { z } from "zod";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ErrorDialog } from "./ErrorDialog.tsx";
 
 type SignUpPageProps = {
   wantToLogin: boolean;
 };
 
+const createSignUpSchema = (registering: boolean) =>
+  z.object({
+    name: registering
+      ? z
+          .string()
+          .min(1, "Nome é obrigatório")
+          .max(20, "O nome deve conter no máximo 20 caracteres")
+      : z.string().optional(),
+    email: z.string().email("Email inválido").min(1, "Email é obrigatório"),
+    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  });
+
 export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [registering, setRegistering] = useState<boolean>(true);
+  const [screenLoading, setScreenLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const SignUpSchema = createSignUpSchema(registering);
 
-    if (!registering && email && password) {
-      try {
-        console.log("email:", email, "password:", password);
-        const response = await getUser({ username: email, password });
-        if (response && response < 400) {
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error during login:", error);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(SignUpSchema),
+  });
+
+  useEffect(() => {
+    const fn = async () => {
+      await setDelay(2500);
+      setScreenLoading(false);
+    };
+    fn();
+  }, []);
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    if (!registering) {
+      const response = await getUser({
+        username: data.email,
+        password: data.password,
+      });
+      setLoading(false);
+      navigate("/");
+
+      if (response && +response >= 400) {
+        setHasError(true);
+        setLoading(false);
+        return;
       }
+
       return;
     }
 
-    if (registering && email && name && password) {
-      try {
-        const response = await createUser({ name, email, password });
+    if (registering) {
+      const response = await createUser({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
 
-        if (response.ok) {
-          await getUser({ username: email, password });
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error during registration:", error);
+      if (response && +response >= 400) {
+        setHasError(true);
+        setLoading(false);
+        return;
       }
+
+      await getUser({ username: data.email, password: data.password });
+      setLoading(false);
+      navigate("/");
     }
   };
 
@@ -57,11 +101,9 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
 
   useEffect(() => {
     if (registering) {
-      setEmail("");
-      setName("");
-      setPassword("");
+      reset();
     }
-  }, [registering]);
+  }, [registering, reset]);
 
   const isWideScreen = useMediaQuery("(min-width: 1628px)");
 
@@ -84,77 +126,138 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
           <Header />
         </div>
       )}
-      <Card sx={{ width: { xs: "90%", sm: 500 }, padding: 4 }}>
-        <Box className="flex justify-between items-center">
-          <CommonText
-            text={registering ? "Registrar" : "Entrar"}
-            style={{ marginLeft: 14 }}
-          />
-          <IconButton
-            title="Voltar para a página principal"
-            onClick={() => navigate("/")}
+      {screenLoading ? (
+        <div className={`${!isWideScreen && "mb-auto flex"}`}>
+          <div
+            className={`p-4 bg-white rounded shadow w-[400px] ${
+              !isWideScreen && "w-[200px]"
+            }`}
           >
-            <HomeRoundedIcon color="success" />
-          </IconButton>
-        </Box>
-        <form className="flex flex-col p-4" onSubmit={handleSubmit}>
-          {registering && (
+            <div className="animate-pulse flex space-x-4">
+              <div className="rounded-full bg-gray-300 h-12 w-12"></div>
+              <div className="flex-1 space-y-4 py-1">
+                <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-300 rounded"></div>
+                  <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Card sx={{ width: { xs: "90%", sm: 500 }, padding: 4 }}>
+          <Box className="flex justify-between items-center">
+            <CommonText
+              text={registering ? "Registrar" : "Entrar"}
+              style={{ marginLeft: 14 }}
+            />
+            <IconButton
+              title="Voltar para a página principal"
+              onClick={() => navigate("/")}
+            >
+              <HomeRoundedIcon color="success" />
+            </IconButton>
+          </Box>
+          <form className="flex flex-col p-4" onSubmit={handleSubmit(onSubmit)}>
+            {registering && (
+              <label className="flex flex-col mt-2">
+                Informe seu nome:
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                  )}
+                />
+                {errors.name && (
+                  <span className="text-red-500 text-sm">
+                    <>{errors.name.message}</>
+                  </span>
+                )}
+              </label>
+            )}
             <label className="flex flex-col mt-2">
-              Informe seu nome:
-              <input
-                value={name}
-                type="text"
-                className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(e) => setName(e.target.value)}
+              Informe seu email:
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="email"
+                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                )}
               />
+              {errors.email && (
+                <span className="text-red-500 text-sm">
+                  <>{errors.email.message}</>
+                </span>
+              )}
             </label>
-          )}
-          <label className="flex flex-col mt-2">
-            Informe seu email:
-            <input
-              value={email}
-              type="email"
-              className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <label className="flex flex-col mt-2">
-            Informe sua senha:
-            <input
-              value={password}
-              type={showPassword ? "text" : "password"}
-              className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-          <button
-            className="mt-2 text-green-500 hover:text-green-700"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowPassword(!showPassword);
-            }}
-          >
-            {showPassword ? "Esconder" : "Mostrar"} senha
-          </button>
-          <button
-            className="mt-4 p-2 bg-green-500 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            type="submit"
-          >
-            {!registering ? "Entrar" : "Registrar"}
-          </button>
-          <button
-            className={`${
-              registering ? "mt-12" : "mt-32"
-            } text-green-500 hover:text-green-700`}
-            onClick={(e) => {
-              e.preventDefault();
-              setRegistering(!registering);
-            }}
-          >
-            {registering ? "Já possuo uma conta" : "Gostaria de me registrar"}
-          </button>
-        </form>
-      </Card>
+            <label className="flex flex-col mt-2">
+              Informe sua senha:
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type={showPassword ? "text" : "password"}
+                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                )}
+              />
+              {errors.password && (
+                <span className="text-red-500 text-sm">
+                  <>{errors.password.message}</>
+                </span>
+              )}
+            </label>
+            <button
+              className="mt-2 text-green-500 hover:text-green-700"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPassword(!showPassword);
+              }}
+            >
+              {showPassword ? "Esconder" : "Mostrar"} senha
+            </button>
+            {loading ? (
+              <div className="mr-[50%] ml-[45%] mt-4 float-right">
+                <div className="w-8 h-8 rounded-full absolute border-8 border-solid border-gray-200"></div>
+                <div className="w-8 h-8 rounded-full animate-spin absolute border-8 border-solid border-green-500 border-t-transparent shadow-md"></div>
+              </div>
+            ) : (
+              <button
+                className="mt-4 p-2 bg-green-500 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                type="submit"
+              >
+                {!registering ? "Entrar" : "Registrar"}
+              </button>
+            )}
+            <button
+              className={`${
+                registering ? "mt-12" : "mt-32"
+              } text-green-500 hover:text-green-700`}
+              onClick={(e) => {
+                e.preventDefault();
+                setRegistering(!registering);
+              }}
+            >
+              {registering ? "Já possuo uma conta" : "Gostaria de me registrar"}
+            </button>
+          </form>
+        </Card>
+      )}
+      {hasError && (
+        <ErrorDialog open={hasError} onClick={() => setHasError(false)} />
+      )}
     </Box>
   );
 }
