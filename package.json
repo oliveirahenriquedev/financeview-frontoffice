@@ -50,5 +50,6 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
-  }
+  },
+  "proxy": "https://cxnv7rnab4.us-east-2.awsapprunner.com"
 }

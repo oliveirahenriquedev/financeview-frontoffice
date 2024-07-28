@@ -11,6 +11,10 @@ export async function listStocks(): Promise<Stock[]> {
   const response = await fetch(
     "https://cxnv7rnab4.us-east-2.awsapprunner.com/stock",
     {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
       mode: "cors",
     }
   );
@@ -20,7 +24,14 @@ export async function listStocks(): Promise<Stock[]> {
 
 export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
   const response = await fetch(
-    `https://cxnv7rnab4.us-east-2.awsapprunner.com/stock/${ticker}`
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/stock/${ticker}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    }
   );
   return response.json();
 }
@@ -31,10 +42,10 @@ export async function createUser(body: UserFields) {
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Adiciona o header para JSON
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body), // Converte o corpo para JSON
-      mode: "cors", // Define o modo como 'cors'
+      body: JSON.stringify(body),
+      mode: "cors",
     }
   );
 
@@ -42,8 +53,7 @@ export async function createUser(body: UserFields) {
     return response.status;
   }
 
-  // Converte a resposta em JSON
-  return response;
+  return response.json();
 }
 
 export async function getUser(body: { username: string; password: string }) {
@@ -72,7 +82,9 @@ export async function getUser(body: { username: string; password: string }) {
 
     const responseData = await response.json();
     tokenManager.setCurrentToken(responseData.access_token);
-  } catch (error) {}
+  } catch (error) {
+    console.error("Network error:", error);
+  }
 }
 
 export async function sendReview(
@@ -91,7 +103,8 @@ export async function sendReview(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ ...body, token: undefined }),
+      body: JSON.stringify(body),
+      mode: "cors",
     }
   );
 
@@ -118,6 +131,7 @@ export async function putUserInfo(
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
+      mode: "cors",
     }
   );
 
@@ -137,6 +151,7 @@ export async function getUserImage(userId: string, token: string | null) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      mode: "cors",
     }
   );
 
