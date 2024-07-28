@@ -125,3 +125,21 @@ export async function putUserInfo(
   const responseData = await response.json();
   tokenManager.setCurrentToken(responseData.access_token);
 }
+
+export async function getUserImage(userId: string, token: string | null) {
+  const response = await fetch(
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/image/${userId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json();
+}

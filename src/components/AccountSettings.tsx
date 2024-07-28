@@ -6,14 +6,16 @@ import { Header } from "./Header.tsx";
 import { setDelay, TokenManager } from "../helpers.ts";
 import { jwtDecode } from "jwt-decode";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { putUserInfo } from "../api.ts";
+import { getUser, getUserImage, putUserInfo } from "../api.ts";
 import { ErrorDialog } from "./ErrorDialog.tsx";
+import { useAsyncCallback } from "react-async-hook";
 
 export function AccountSettings() {
   const [loading, setLoading] = useState<boolean>(false);
   const [screenLoading, setScreenLoading] = useState<boolean>(true);
   const [newName, setNewName] = useState<string | null | undefined>(undefined);
   const [newEmail, setNewEmail] = useState<string | null>();
+  const [newMedia, setNewMedia] = useState<string | ArrayBuffer | null>(null);
   const [media, setMedia] = useState<string | ArrayBuffer | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
 
@@ -32,12 +34,20 @@ export function AccountSettings() {
     fn();
   });
 
+  let img;
+
   useEffect(() => {
-    if (user) {
-      setNewName(user.name);
-      setNewEmail(user.email);
-      setMedia(user.user_url_image);
-    }
+    const fn = async () => {
+      if (user) {
+        img = await getUserImage(user.user_id, tokenManager.getCurrentToken());
+        setNewName(user.name);
+        setNewEmail(user.email);
+        setMedia(img.url_image);
+        console.log("test ", img);
+      }
+    };
+
+    fn();
   }, []);
 
   const isWideScreen = useMediaQuery("(min-width: 1519px)");
@@ -50,7 +60,7 @@ export function AccountSettings() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setMedia(reader.result);
+        setNewMedia(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -126,7 +136,7 @@ export function AccountSettings() {
       </Box>
     );
   }
-
+  let submitCount = 0;
   const handleSubmit = async (e) => {
     if (newName || newEmail || media) {
       e.preventDefault();
@@ -137,26 +147,27 @@ export function AccountSettings() {
         {
           name: newName || user.name,
           email: newEmail || user.email,
-          url_image: media,
+          url_image: newMedia || media,
         },
         tokenManager.getCurrentToken()
       );
 
+      console.log("res", response);
+      submitCount++;
       if (response && response >= 400) {
         setHasError(true);
         setLoading(false);
         return;
       }
 
-      setLoading(false);
       window.location.reload();
+      setLoading(false);
     }
   };
 
   const hasNoChanges =
-    user.name === newName &&
-    user.email === newEmail &&
-    user.user_url_image === media;
+    (user.name === newName && user.email === newEmail && newMedia === media) ||
+    (newMedia === null && media === null && submitCount > 0);
 
   return (
     <Box
@@ -235,7 +246,8 @@ export function AccountSettings() {
           >
             <div className="flex flex-col items-center sm:items-start mb-4 sm:mb-0">
               <Avatar
-                src={user.user_image_url || media}
+                // @ts-ignore
+                src={newMedia ?? media}
                 sx={
                   isMobileScreen
                     ? {
@@ -282,7 +294,7 @@ export function AccountSettings() {
                   >
                     <path d="M1344 1472q0-26-19-45t-45-19-45 19-19 45 19 45 45 19 45-19 19-45zm256 0q0-26-19-45t-45-19-45 19-19 45 19 45 45 19 45-19 19-45zm128-224v320q0 40-28 68t-68 28h-1472q-40 0-68-28t-28-68v-320q0-40 28-68t68-28h427q21 56 70.5 92t110.5 36h256q61 0 110.5-36t70.5-92h427q40 0 68 28t28 68zm-325-648q-17 40-59 40h-256v448q0 26-19 45t-45 19h-256q-26 0-45-19t-19-45v-448h-256q-42 0-59-40-17-39 14-69l448-448q18-19 45-19t45 19l448 448q31 30 14 69z"></path>
                   </svg>
-                  {media ? "Alterar" : "Selecionar"} imagem
+                  {media || newMedia ? "Alterar" : "Selecionar"} imagem
                 </button>
                 <button
                   className={`middle none center mr-3 rounded-lg bg-gradient-to-tr from-pink-600 to-pink-400 py-2 px-6 font-sans text-base font-bold  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-4 w-[80%] ${
@@ -291,9 +303,10 @@ export function AccountSettings() {
                   data-ripple-light="true"
                   onClick={(e) => {
                     e.preventDefault();
-                    setMedia("");
+                    setNewMedia(null);
+                    setMedia(null);
                   }}
-                  disabled={!media || loading}
+                  disabled={(!media && !newMedia) || loading}
                 >
                   <DeleteIcon sx={{ marginBottom: 0.2 }} />
                 </button>
