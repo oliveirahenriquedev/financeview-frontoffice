@@ -73,7 +73,7 @@ export function AccountSettings() {
   if (!user) {
     return (
       <Box
-        className="bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col justify-center items-center"
+        className="bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col justify-center items-center font-roboto"
         sx={{
           padding: 2,
         }}
@@ -107,7 +107,7 @@ export function AccountSettings() {
                 }
           }
         >
-          <Box className="flex flex-col justify-center items-center">
+          <Box className="flex flex-col justify-center items-center font-roboto">
             <h1 className="text-4xl mb-2 text-center mt-6">
               Você não está autenticado
             </h1>

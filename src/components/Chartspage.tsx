@@ -70,7 +70,7 @@ export function Chartspage() {
   };
 
   return (
-    <div className="flex flex-col w-screen h-screen overflow-hidden">
+    <div className="flex flex-col w-screen h-screen overflow-hidden font-roboto">
       {isWideScreen && isTallScreen ? (
         <div className="mr-20">
           <Sidebar />
@@ -81,7 +81,7 @@ export function Chartspage() {
         </div>
       )}
       <div
-        className={`bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col items-center transition-all duration-500`}
+        className={`bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col items-center transition-all duration-500 font-roboto`}
       >
         <CommonText
           text={`Por favor, selecione ${
@@ -150,7 +150,7 @@ export function Chartspage() {
           />
         </div>
         {loading && isWideScreen && selectedTicker ? (
-          <div className="w-full max-w-[1000px] h-[1200px] border-2 rounded-lg mt-6 p-8 bg-white mb-[220px]">
+          <div className="w-full max-w-[1000px] h-[1200px] border-2 rounded-lg mt-6 p-8 bg-white mb-[220px] font-roboto">
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex justify-between mb-4">

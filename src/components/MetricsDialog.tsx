@@ -28,7 +28,7 @@ export function MetricsDialog({
       onClose={onClose}
       sx={{ width: "100%", height: "100%" }}
     >
-      <p className="text-3xl flex justify-center items-center mb-2 mt-4 ml-8 max-w-4xl flex-nowrap">
+      <p className="text-3xl flex justify-center items-center mb-2 mt-4 ml-8 max-w-4xl flex-nowrap font-roboto">
         {metricsProps.longName}{" "}
         {metricsProps.isCompairing &&
           metricsProps.secondaryLongName &&

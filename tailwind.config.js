@@ -5,6 +5,7 @@ module.exports = {
     fontFamily: {
       typographica: ["TypoGraphica"],
       astonpoliz: ["Astonpoliz"],
+      roboto: ["Roboto"],
     },
     extend: {
       backgroundImage: {

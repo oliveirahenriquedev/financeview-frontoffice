@@ -103,7 +103,7 @@ export function AboutUs() {
           className="animate-fade-in"
         >
           <p
-            className={`flex justify-center font-astonpoliz ${
+            className={`flex justify-center font-roboto ${
               isSmallScreen ? "text-3xl" : "text-6xl"
             } mt-2`}
           >
@@ -207,7 +207,7 @@ export function AboutUs() {
           className="animate-fade-in"
         >
           <p
-            className={`flex justify-center font-astonpoliz ${
+            className={`flex justify-center font-roboto ${
               isSmallScreen ? "text-3xl" : "text-6xl"
             } mt-2`}
           >
@@ -234,7 +234,7 @@ export function AboutUs() {
                     marginLeft: "auto",
                   }}
                 />
-                <p className="mb-1 text-xl font-astonpoliz">{dev.name}</p>
+                <p className="mb-1 text-xl font-roboto">{dev.name}</p>
                 <p className="mb-10">{dev.description}</p>
                 <button
                   className="mb-2 flex flex-row justify-center text-gray-700"

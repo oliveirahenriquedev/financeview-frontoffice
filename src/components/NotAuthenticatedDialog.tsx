@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Dialog } from "@mui/material";
+import { Card, Dialog, useMediaQuery } from "@mui/material";
 
 type NotAuthenticatedDialogProps = {
   open: boolean;
@@ -12,24 +12,28 @@ export function NotAuthenticatedDialog({
   onClose,
   navigate,
 }: NotAuthenticatedDialogProps) {
+  const isSmallScreen = useMediaQuery("(max-width: 800px)");
+
   return (
     <Dialog
       open={open}
       PaperProps={{
         sx: {
-          minWidth: "800px", // Define a largura mínima
-          minHeight: "350px", // Define a altura mínima
+          minWidth: isSmallScreen ? "20px" : "880px", // Define a largura mínima
+          minHeight: "350px",
           alignItems: "center",
+          maxWidth: isSmallScreen ? "20px" : undefined,
         },
       }}
       sx={{
         "& .MuiDialog-paper": {
-          minWidth: "800px", // Define a largura mínima
-          minHeight: "350px", // Define a altura mínima
+          minWidth: isSmallScreen ? "20px" : "880px", // Define a largura mínima
+          minHeight: "350px",
+          maxWidth: isSmallScreen ? "80%" : undefined,
         },
       }}
     >
-      <div>
+      <div className="p-4 font-roboto">
         <p className="text-4xl mt-4 text-red-700">Você não está autenticado</p>
         <p className="text-xl mt-12">
           Para realizar o envio deste formulário, você precisa estar
