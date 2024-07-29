@@ -21,6 +21,7 @@ import { jwtDecode } from "jwt-decode";
 import { ErrorDialog } from "./ErrorDialog.tsx";
 import { NotAuthenticatedDialog } from "./NotAuthenticatedDialog.tsx";
 import { useNavigate } from "react-router-dom";
+import DefaultAlert from "./DefaultAlert.tsx";
 
 const tokenManager = new TokenManager();
 
@@ -32,6 +33,7 @@ const reviewSchema = z.object({
 export function AboutUs() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [notAuthenticated, setNotAuthenticated] = useState<boolean>(false);
   const isWideScreen = useMediaQuery("(min-width: 1628px)");
@@ -69,6 +71,7 @@ export function AboutUs() {
         setHasError(true);
       }
       setLoading(false);
+      setAlertOpen(true);
     }
   };
 
@@ -182,6 +185,12 @@ export function AboutUs() {
             </div>
           </form>
         </Card>
+        {alertOpen && (
+          <DefaultAlert
+            message="Sua avaliação foi registrada com sucesso"
+            onClick={() => setAlertOpen(false)}
+          />
+        )}
         <Card
           sx={{
             height: "auto",

@@ -6,15 +6,18 @@ import { CommonText } from "./CommonText.tsx";
 import { createUser, getUser } from "../api.ts";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
-import { setDelay } from "../helpers.ts";
+import { setDelay, TokenManager } from "../helpers.ts";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorDialog } from "./ErrorDialog.tsx";
+import { jwtDecode } from "jwt-decode";
 
 type SignUpPageProps = {
   wantToLogin: boolean;
 };
+
+const tokenManager = new TokenManager();
 
 const createSignUpSchema = (registering: boolean) =>
   z.object({
@@ -37,6 +40,11 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   const [hasError, setHasError] = useState<boolean>(false);
 
   const SignUpSchema = createSignUpSchema(registering);
+
+  let user;
+  if (tokenManager.getCurrentToken()) {
+    user = jwtDecode(tokenManager.getCurrentToken() || "");
+  }
 
   const {
     control,
@@ -63,7 +71,6 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
         password: data.password,
       });
       setLoading(false);
-      navigate("/");
 
       if (response && +response >= 400) {
         setHasError(true);
@@ -71,6 +78,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
         return;
       }
 
+      navigate("/");
       return;
     }
 
@@ -106,6 +114,63 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   }, [registering, reset]);
 
   const isWideScreen = useMediaQuery("(min-width: 1628px)");
+
+  if (user) {
+    return (
+      <Box
+        className="bg-gradient-to-b from-white to-black h-screen w-screen flex flex-col justify-center items-center"
+        sx={{
+          padding: 2,
+        }}
+      >
+        <Card
+          sx={
+            !isWideScreen
+              ? {
+                  width: {
+                    xs: "90%",
+                    sm: 1000,
+                  },
+                  padding: 4,
+                  height: "50%",
+                }
+              : {
+                  width: {
+                    xs: "90%",
+                    sm: 1000,
+                  },
+                  padding: 4,
+                  height: 550,
+                }
+          }
+        >
+          <Box className="flex flex-col justify-center items-center">
+            <h1 className="text-4xl mb-2 text-center mt-6">
+              Você já está autenticado!
+            </h1>
+            <img
+              src={"/images/4882467.jpg"}
+              className="w-[300px] h-[300px] object-cover"
+            />
+            <p className="text-xl text-center mb-">
+              Você está acessando a Área de Login mesmo já estando
+              registrado(a).
+            </p>
+            <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-7">
+              <button
+                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border-b-4 border-green-700 rounded transform transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 mt-4 float-right
+
+                `}
+                onClick={() => navigate("/")}
+              >
+                Voltar para a Home
+              </button>
+            </div>
+          </Box>
+        </Card>
+      </Box>
+    );
+  }
 
   return (
     <Box

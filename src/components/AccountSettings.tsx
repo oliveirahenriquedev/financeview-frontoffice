@@ -211,7 +211,7 @@ export function AccountSettings() {
                       sm: 1000,
                     },
                     padding: 4,
-                    height: 550,
+                    height: 600,
                     marginBottom: "auto",
                   }
                 : {
@@ -220,7 +220,7 @@ export function AccountSettings() {
                       sm: 1000,
                     },
                     padding: 4,
-                    height: 550,
+                    height: 600,
                   }
               : {
                   width: "100%",
@@ -268,8 +268,8 @@ export function AccountSettings() {
               />
               <Box
                 mt={2}
-                display={`${isMobileScreen ? "flex-column" : undefined}`}
                 justifyContent="space-between"
+                sx={{ marginLeft: "auto", marginRight: "auto" }}
               >
                 <button
                   type="button"
@@ -297,7 +297,7 @@ export function AccountSettings() {
                   {media || newMedia ? "Alterar" : "Selecionar"} imagem
                 </button>
                 <button
-                  className={`middle none center mr-3 rounded-lg bg-gradient-to-tr from-pink-600 to-pink-400 py-2 px-6 font-sans text-base font-bold  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-4 w-[80%] ${
+                  className={`middle none center mr-3 rounded-lg bg-gradient-to-tr from-pink-600 to-pink-400 py-2 px-6 font-sans text-base font-bold  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-[100%] mt-2 ${
                     isMobileScreen && "ml-0 mb-4"
                   }`}
                   data-ripple-light="true"
@@ -314,7 +314,7 @@ export function AccountSettings() {
             </div>
             <form
               className={`w-full ml-20 mb-auto mt-auto ${
-                isMobileScreen && "w-[50%] mr-20"
+                isMobileScreen && "w-[70%] mr-20"
               }`}
             >
               <label className="flex flex-col mb-4">

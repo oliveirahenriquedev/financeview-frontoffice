@@ -46,7 +46,10 @@ export function Header() {
     setDrawerOpen(open);
   };
 
-  const isSmallScreen = useMediaQuery("(max-width: 635px)");
+  window.addEventListener("unload", function () {
+    // Remover um item específico do localStorage
+    localStorage.removeItem("accessToken");
+  });
 
   const handleLoginLogout = () => {
     if (tokenManager.getCurrentToken()) {

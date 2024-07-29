@@ -24,13 +24,14 @@ export function ErrorDialog({ open, onClick }: ErrorDialogProps) {
         },
       }}
     >
-      <div>
+      <div className="p-8">
         <p className="text-4xl mt-4 text-red-700">
           Houve um erro com a requisição
         </p>
         <p className="text-xl mt-12">
-          Encontramos um erro ao realizar a requisição. Por favor, tente
-          novamente. <br />
+          Encontramos um erro ao realizar a requisição. Por favor, verifique
+          quaisquer campos de formulário e tente novamente
+          <br />
           <br /> Caso o erro persista, contate nosso suporte.
         </p>
         <div className="flex justify-center mb-auto mt-[15%]">

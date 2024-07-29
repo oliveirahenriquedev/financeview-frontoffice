@@ -5,7 +5,7 @@ import { CommonText } from "./CommonText.tsx";
 import { Autocomplete, Switch, TextField, useMediaQuery } from "@mui/material";
 import { useAsyncCallback } from "react-async-hook";
 import { getStocksInfo, listStocks } from "../api.ts";
-import { GetStockResponse, setDelay } from "../helpers.ts";
+import { GetStockResponse, Period, setDelay } from "../helpers.ts";
 import { Chart } from "./Chart.tsx";
 
 export function Chartspage() {
@@ -16,6 +16,7 @@ export function Chartspage() {
   const [stocksInfo, setStocksInfo] = useState<GetStockResponse>();
   const [secondaryStocksInfo, setSecondaryStocksInfo] =
     useState<GetStockResponse>();
+  const [period, setPeriod] = useState<Period>("1mo");
 
   const [compare, setCompare] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,12 +38,12 @@ export function Chartspage() {
 
     if (selectedTicker) {
       async function fetchData() {
-        setStocksInfo(await getStocksInfo(selectedTicker || ""));
+        setStocksInfo(await getStocksInfo(selectedTicker || "", period));
         setLoading(false);
       }
       fetchData();
     }
-  }, [selectedTicker]);
+  }, [selectedTicker, period]);
 
   useEffect(() => {
     if (secondarySelectedTicker === "") {
@@ -52,17 +53,21 @@ export function Chartspage() {
     if (secondarySelectedTicker) {
       async function fetchData() {
         setSecondaryStocksInfo(
-          await getStocksInfo(secondarySelectedTicker || "")
+          await getStocksInfo(secondarySelectedTicker || "", period)
         );
       }
       fetchData();
     }
-  }, [secondarySelectedTicker]);
+  }, [secondarySelectedTicker, period]);
 
   useEffect(() => {
     setSecondaryStocksInfo(undefined);
     setSecondarySelectedTicker("");
   }, [compare]);
+
+  const handlePeriodChange = (_e, newValue) => {
+    setPeriod(newValue.props.value);
+  };
 
   return (
     <div className="flex flex-col w-screen h-screen overflow-hidden">
@@ -187,6 +192,8 @@ export function Chartspage() {
               secondaryTickerId={secondarySelectedTicker}
               isCompairing={compare}
               displayButton={!isWideScreen || !isTallScreen}
+              period={period}
+              onPeriodChange={handlePeriodChange}
             />
           )
         )}

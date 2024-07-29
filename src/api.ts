@@ -22,9 +22,12 @@ export async function listStocks(): Promise<Stock[]> {
   return data;
 }
 
-export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
+export async function getStocksInfo(
+  ticker: string,
+  range: string
+): Promise<GetStockResponse> {
   const response = await fetch(
-    `https://cxnv7rnab4.us-east-2.awsapprunner.com/stock/${ticker}`,
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/stock/${ticker}/${range}`,
     {
       method: "GET",
       headers: {
@@ -33,6 +36,7 @@ export async function getStocksInfo(ticker: string): Promise<GetStockResponse> {
       mode: "cors",
     }
   );
+
   return response.json();
 }
 
@@ -160,4 +164,37 @@ export async function getUserImage(userId: string, token: string | null) {
   }
 
   return await response.json();
+}
+
+export async function favoriteStock(
+  body: {
+    user_id: number;
+    stock_ticker: string;
+  },
+  method: "POST" | "DELETE",
+  token: string | null
+) {
+  await fetch(`https://cxnv7rnab4.us-east-2.awsapprunner.com/user/favorites`, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+    mode: "cors",
+  });
+}
+
+export async function listFavoriteStocks(userId: number, token: string | null) {
+  const response = await fetch(
+    `https://cxnv7rnab4.us-east-2.awsapprunner.com/user/favorites/${userId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.json();
 }

@@ -113,17 +113,42 @@ export function getCurrentUserData() {
 }
 
 export class TokenManager {
-  getCurrentToken() {
-    return localStorage.getItem("accessToken");
+  private static cookieName = "accessToken";
+
+  private static getCookie(name: string): string | null {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+    return null;
   }
 
-  setCurrentToken(token: string) {
-    return localStorage.setItem("accessToken", token);
+  private static setCookie(
+    name: string,
+    value: string,
+    minutes: number = 30
+  ): void {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + minutes * 60 * 1000); // 30 minutos
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
   }
 
-  removeCurrentToken() {
-    return localStorage.removeItem("accessToken");
+  private static removeCookie(name: string): void {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  }
+
+  getCurrentToken(): string | null {
+    return TokenManager.getCookie(TokenManager.cookieName);
+  }
+
+  setCurrentToken(token: string): void {
+    TokenManager.setCookie(TokenManager.cookieName, token);
+  }
+
+  removeCurrentToken(): void {
+    TokenManager.removeCookie(TokenManager.cookieName);
   }
 }
 
 export const setDelay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+export type Period = "1d" | "5d" | "1mo" | "3mo";
