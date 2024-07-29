@@ -6,6 +6,7 @@ module.exports = {
       typographica: ["TypoGraphica"],
       astonpoliz: ["Astonpoliz"],
       roboto: ["Roboto"],
+      inter: ["Inter"],
     },
     extend: {
       backgroundImage: {

@@ -33,7 +33,7 @@ export function NotAuthenticatedDialog({
         },
       }}
     >
-      <div className="p-4 font-roboto">
+      <div className="p-4 font-inter">
         <p className="text-4xl mt-4 text-red-700">Você não está autenticado</p>
         <p className="text-xl mt-12">
           Para realizar o envio deste formulário, você precisa estar

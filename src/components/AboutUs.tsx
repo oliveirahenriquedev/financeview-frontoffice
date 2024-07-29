@@ -93,23 +93,22 @@ export function AboutUs() {
       >
         <Card
           sx={{
-            height: "auto",
+            height: !isSmallScreen ? "800px" : "auto",
             width: isWideScreen ? "40%" : isMediumScreen ? "60%" : "80%",
             marginTop: 8,
             marginLeft: isMediumScreen ? "24px" : isWideScreen ? 40 : "auto",
             marginRight: isWideScreen ? "0px" : "auto",
-            marginBottom: 8,
           }}
           className="animate-fade-in"
         >
           <p
-            className={`flex justify-center font-roboto ${
+            className={`flex justify-center font-inter ${
               isSmallScreen ? "text-3xl" : "text-6xl"
             } mt-2`}
           >
             Sobre a <span className="text-yellow-500 ml-4">FinanceView</span>
           </p>
-          <p className="flex mt-4 text-2xl p-4">
+          <p className="flex mt-4 text-xl p-4 font-inter">
             FinanceView é uma startup criada com o objetivo de facilitar o
             acesso dos usuários ao mercado de ações. <br />
             <br /> Oferecendo uma plataforma intuitiva e gratuita, a FinanceView
@@ -123,7 +122,7 @@ export function AboutUs() {
             todos.
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex justify-center align-center p-2 ml-2">
+            <div className="flex justify-center align-center p-2 ml-2 font-inter">
               <p>
                 Envie uma avaliação! Seu feedback nos ajuda a melhorar o sistema
               </p>
@@ -143,7 +142,11 @@ export function AboutUs() {
               </p>
             )}
             <div>
-              <label className="flex flex-col mt-2 p-4">
+              <label
+                className={`flex flex-col mt-2 p-4 font-inter ${
+                  errors.root && "mt-8"
+                }`}
+              >
                 Diga um pouco mais da sua experiência
                 <Controller
                   name="description"
@@ -185,7 +188,7 @@ export function AboutUs() {
             </div>
           </form>
         </Card>
-        {alertOpen && (
+        {alertOpen && isSmallScreen && (
           <DefaultAlert
             message="Sua avaliação foi registrada com sucesso"
             onClick={() => setAlertOpen(false)}
@@ -193,7 +196,7 @@ export function AboutUs() {
         )}
         <Card
           sx={{
-            height: "auto",
+            height: !isSmallScreen ? "800px" : "auto",
             width: isWideScreen ? "35%" : isMediumScreen ? "60%" : "80%",
             marginTop: 8,
             marginLeft: isSmallScreen || isMediumScreen ? "24px" : "auto",
@@ -202,12 +205,12 @@ export function AboutUs() {
               : isSmallScreen || isMediumScreen
               ? "24px"
               : "auto",
-            marginBottom: 8,
+            marginBottom: 1,
           }}
           className="animate-fade-in"
         >
           <p
-            className={`flex justify-center font-roboto ${
+            className={`flex justify-center font-inter ${
               isSmallScreen ? "text-3xl" : "text-6xl"
             } mt-2`}
           >
@@ -234,7 +237,7 @@ export function AboutUs() {
                     marginLeft: "auto",
                   }}
                 />
-                <p className="mb-1 text-xl font-roboto">{dev.name}</p>
+                <p className="mb-1 text-xl font-inter">{dev.name}</p>
                 <p className="mb-10">{dev.description}</p>
                 <button
                   className="mb-2 flex flex-row justify-center text-gray-700"
@@ -267,6 +270,14 @@ export function AboutUs() {
             navigate(path);
           }}
         />
+      )}
+      {alertOpen && !isSmallScreen && (
+        <div className="w-[20%] ml-auto mr-[50%]">
+          <DefaultAlert
+            message="Sua avaliação foi registrada com sucesso"
+            onClick={() => setAlertOpen(false)}
+          />
+        </div>
       )}
     </div>
   );

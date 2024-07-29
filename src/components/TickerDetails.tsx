@@ -31,12 +31,7 @@ export function TickerDetails({
   }
 
   return (
-    <Dialog
-      open={open}
-      maxWidth="xl"
-      sx={{ padding: 8, width: "100%" }}
-      className="font-roboto"
-    >
+    <Dialog open={open} maxWidth="xl" sx={{ padding: 8, width: "100%" }}>
       <button onClick={handleClick}>
         <CloseRoundedIcon color="error" sx={{ display: "block" }} />
       </button>
