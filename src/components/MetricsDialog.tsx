@@ -51,7 +51,7 @@ export function MetricsDialog({
             label:
               metricsProps.secondaryTickerId !== "" && metricsProps.isCompairing
                 ? metricsProps.secondaryTickerId
-                : undefined,
+                : "Não selecionado",
           },
         ]}
         height={600}

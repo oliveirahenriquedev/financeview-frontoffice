@@ -94,7 +94,9 @@ export function Chartspage() {
           <Autocomplete
             options={
               listStocksAsyncCallback.result
-                ? listStocksAsyncCallback.result.map((stock) => stock.ticker)
+                ? listStocksAsyncCallback.result
+                    .map((stock) => stock.ticker)
+                    .filter((stock) => !stock.endsWith("F"))
                 : []
             }
             onChange={(e, newValue) =>
@@ -116,7 +118,9 @@ export function Chartspage() {
             <Autocomplete
               options={
                 listStocksAsyncCallback.result
-                  ? listStocksAsyncCallback.result.map((stock) => stock.ticker)
+                  ? listStocksAsyncCallback.result
+                      .map((stock) => stock.ticker)
+                      .filter((stock) => !stock.endsWith("F"))
                   : []
               }
               onChange={(_e, newValue) =>

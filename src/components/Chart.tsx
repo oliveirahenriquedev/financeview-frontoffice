@@ -108,38 +108,6 @@ export function Chart({
     setMetricsOpen(!metricsOpen);
   };
 
-  const handleFavoriteTicker = async () => {
-    if (isAuthenticated) {
-      const fn = async () => {
-        const res = await listFavoriteStocks(
-          user.user_id,
-          tokenManager.getCurrentToken()
-        );
-        setFavoriteStocks(res.favorites);
-      };
-
-      fn();
-    }
-
-    if (favoriteStocks.includes(tickerId)) {
-      await favoriteStock(
-        { user_id: +user.user_id, stock_ticker: tickerId },
-        "DELETE",
-        tokenManager.getCurrentToken()
-      );
-      setIsFavoriting(false);
-    } else {
-      await favoriteStock(
-        { user_id: +user.user_id, stock_ticker: tickerId },
-        "POST",
-        tokenManager.getCurrentToken()
-      );
-      setIsFavoriting(true);
-    }
-
-    setSuccess(true);
-  };
-
   useEffect(() => {
     const fn = async () => {
       await setDelay(2500);
@@ -159,6 +127,11 @@ export function Chart({
           </div>
         ) : (
           <div className="flex mt-auto mb-auto flex-col justify-center">
+            <PeriodSelector
+              value={period}
+              onChange={onPeriodChange}
+              disabled={!isAuthenticated}
+            />
             <button
               style={{
                 display: "flex",
@@ -178,7 +151,7 @@ export function Chart({
             {closeValues.length > 0 && (
               <>
                 <p className="text-3xl flex justify-start items-center mt-4 max-w-4xl">
-                  <div className="flex flex-row w-[40%]">
+                  <div className="flex flex-row w-[50%]">
                     <PeriodSelector
                       onChange={onPeriodChange}
                       value={period}

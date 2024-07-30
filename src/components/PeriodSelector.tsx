@@ -5,12 +5,14 @@ type PeriodSelectorProps = {
   value: string;
   onChange: (e, value) => void;
   disabled?: boolean;
+  sx?: any;
 };
 
 export function PeriodSelector({
   value,
   onChange,
   disabled = false,
+  sx,
 }: PeriodSelectorProps) {
   return (
     <FormControl
@@ -19,6 +21,7 @@ export function PeriodSelector({
         width: "35%",
         marginTop: "10px",
         marginLeft: "16px",
+        ...sx,
       }}
       disabled={disabled}
     >
