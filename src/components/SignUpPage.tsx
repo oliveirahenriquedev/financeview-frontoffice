@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { useNavigate } from "react-router-dom";
 import { CommonText } from "./CommonText.tsx";
-import { createUser, getUser } from "../api.ts";
+import { clickTarget, createUser, getUser } from "../api.ts";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
 import { setDelay, TokenManager } from "../helpers.ts";
@@ -66,6 +66,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   const onSubmit = async (data) => {
     setLoading(true);
     if (!registering) {
+      await clickTarget("login");
       const response = await getUser({
         username: data.email,
         password: data.password,
@@ -83,6 +84,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
     }
 
     if (registering) {
+      await clickTarget("registro");
       const response = await createUser({
         name: data.name,
         email: data.email,

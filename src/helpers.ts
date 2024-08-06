@@ -152,3 +152,5 @@ export class TokenManager {
 export const setDelay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export type Period = "1d" | "5d" | "1mo" | "3mo";
+
+export type TrackedEventProps = "click_boto_graficos" | "login" | "registro";
