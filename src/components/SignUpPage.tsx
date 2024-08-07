@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { useNavigate } from "react-router-dom";
 import { CommonText } from "./CommonText.tsx";
-import { clickTarget, createUser, getUser } from "../api.ts";
+import { createUser, getUser } from "../api.ts";
 import { Sidebar } from "./Sidebar.tsx";
 import { Header } from "./Header.tsx";
 import { setDelay, TokenManager } from "../helpers.ts";
@@ -12,6 +12,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorDialog } from "./ErrorDialog.tsx";
 import { jwtDecode } from "jwt-decode";
+import { PixelTracker } from "./PixelTracker.tsx";
 
 type SignUpPageProps = {
   wantToLogin: boolean;
@@ -66,7 +67,6 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
   const onSubmit = async (data) => {
     setLoading(true);
     if (!registering) {
-      await clickTarget("login");
       const response = await getUser({
         username: data.email,
         password: data.password,
@@ -84,7 +84,6 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
     }
 
     if (registering) {
-      await clickTarget("registro");
       const response = await createUser({
         name: data.name,
         email: data.email,
@@ -184,6 +183,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
         },
       }}
     >
+      <PixelTracker trackedEvent={registering ? "registro" : "login"} />
       {isWideScreen ? (
         <div className="mr-20 flex">
           <Sidebar />

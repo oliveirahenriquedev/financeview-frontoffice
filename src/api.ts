@@ -203,11 +203,3 @@ export async function listFavoriteStocks(userId: number, token: string | null) {
 
   return response.json();
 }
-
-export async function clickTarget(trackedEvent: TrackedEventProps) {
-  await fetch(
-    `https://acauhi.trackpath.com.br/track/?event_id=gBHPqMC7&goal=${trackedEvent}&click_id=123&order_id=${
-      Math.random() * (1000 - 0) + 0
-    }&price=10.00&sub1=Finance&sub2=View&sub3=Testando&sub4=URL&sub5=CODIGO`
-  );
-}

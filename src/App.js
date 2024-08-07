@@ -13,7 +13,6 @@ import { AboutUs } from "./components/AboutUs.tsx";
 import { AccountSettings } from "./components/AccountSettings.tsx";
 import { TokenManager } from "./helpers.ts";
 import { jwtDecode } from "jwt-decode";
-import { clickTarget } from "./api.ts";
 
 const tokenManager = new TokenManager();
 function App() {
@@ -24,7 +23,6 @@ function App() {
   const navigate = useNavigate();
 
   const handleButtonClick = async () => {
-    await clickTarget("click_boto_graficos");
     navigate("/chartspage"); // URL da página de exemplo
   };
 

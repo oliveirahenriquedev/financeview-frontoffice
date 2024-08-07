@@ -7,6 +7,7 @@ import { useAsyncCallback } from "react-async-hook";
 import { getStocksInfo, listStocks } from "../api.ts";
 import { GetStockResponse, Period, setDelay } from "../helpers.ts";
 import { Chart } from "./Chart.tsx";
+import { PixelTracker } from "./PixelTracker.tsx";
 
 export function Chartspage() {
   const [selectedTicker, setSelectedTicker] = useState<string>();
@@ -71,6 +72,7 @@ export function Chartspage() {
 
   return (
     <div className="flex flex-col w-screen h-screen overflow-hidden font-inter">
+      <PixelTracker trackedEvent="click_boto_graficos" />
       {isWideScreen && isTallScreen ? (
         <div className="mr-20">
           <Sidebar />
