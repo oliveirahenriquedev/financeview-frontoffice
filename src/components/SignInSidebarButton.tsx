@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useAsyncCallback } from "react-async-hook";
-import { getUser } from "../api.ts";
-import { jwtDecode } from "jwt-decode";
-import { TokenManager } from "../helpers.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Collapse,
   List,
@@ -11,11 +10,10 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { jwtDecode } from "jwt-decode";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TokenManager } from "../helpers.ts";
 
 type SignInSidebarButton = {
   isSignedIn?: boolean;

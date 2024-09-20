@@ -1,18 +1,18 @@
-import { Box, Card, IconButton, useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import { useNavigate } from "react-router-dom";
-import { CommonText } from "./CommonText.tsx";
-import { createUser, getUser } from "../api.ts";
-import { Sidebar } from "./Sidebar.tsx";
-import { Header } from "./Header.tsx";
-import { setDelay, TokenManager } from "../helpers.ts";
-import { z } from "zod";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorDialog } from "./ErrorDialog.tsx";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import { Box, Card, IconButton, useMediaQuery } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { setDelay, TokenManager } from "../helpers.ts";
+import { createUser, getUser } from "../service/api.ts";
+import { CommonText } from "./CommonText.tsx";
+import { ErrorDialog } from "./ErrorDialog.tsx";
+import { Header } from "./Header.tsx";
 import { PixelTracker } from "./PixelTracker.tsx";
+import { Sidebar } from "./Sidebar.tsx";
 
 type SignUpPageProps = {
   wantToLogin: boolean;

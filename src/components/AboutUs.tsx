@@ -1,27 +1,20 @@
-import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Card,
-  Dialog,
-  Rating,
-  useMediaQuery,
-} from "@mui/material";
-import { Carousel } from "react-responsive-carousel";
-import { Sidebar } from "./Sidebar.tsx";
-import { Header } from "./Header.tsx";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { defaultDevsInfo, TokenManager } from "../helpers.ts";
-import { sendReview } from "../api.ts";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { Avatar, Card, Rating, useMediaQuery } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
-import { ErrorDialog } from "./ErrorDialog.tsx";
-import { NotAuthenticatedDialog } from "./NotAuthenticatedDialog.tsx";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Carousel } from "react-responsive-carousel";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { defaultDevsInfo, TokenManager } from "../helpers.ts";
+import { sendReview } from "../service/api.ts";
 import DefaultAlert from "./DefaultAlert.tsx";
+import { ErrorDialog } from "./ErrorDialog.tsx";
+import { Header } from "./Header.tsx";
+import { NotAuthenticatedDialog } from "./NotAuthenticatedDialog.tsx";
+import { Sidebar } from "./Sidebar.tsx";
 
 const tokenManager = new TokenManager();
 

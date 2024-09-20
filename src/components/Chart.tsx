@@ -1,3 +1,6 @@
+import { Card } from "@mui/material";
+import { LineChart } from "@mui/x-charts";
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import {
   getCurrentDate,
@@ -8,24 +11,10 @@ import {
   StockInfo,
   TokenManager,
 } from "../helpers.ts";
-import { LineChart } from "@mui/x-charts";
-import {
-  Button,
-  Card,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import { TickerDetails } from "./TickerDetails.tsx";
+import DefaultAlert from "./DefaultAlert.tsx";
 import { MetricsDialog } from "./MetricsDialog.tsx";
 import { PeriodSelector } from "./PeriodSelector.tsx";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
-import { favoriteStock, listFavoriteStocks } from "../api.ts";
-import { jwtDecode } from "jwt-decode";
-import DefaultAlert from "./DefaultAlert.tsx";
-import GradeIcon from "@mui/icons-material/Grade";
+import { TickerDetails } from "./TickerDetails.tsx";
 
 type ChartProps = {
   stock: StockInfo;

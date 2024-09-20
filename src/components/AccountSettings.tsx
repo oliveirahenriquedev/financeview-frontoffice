@@ -1,14 +1,13 @@
-import { Avatar, Box, Card, IconButton, useMediaQuery } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Avatar, Box, Card, useMediaQuery } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from "./Sidebar.tsx";
-import { Header } from "./Header.tsx";
 import { setDelay, TokenManager } from "../helpers.ts";
-import { jwtDecode } from "jwt-decode";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { getUser, getUserImage, putUserInfo } from "../api.ts";
+import { getUserImage, putUserInfo } from "../service/api.ts";
 import { ErrorDialog } from "./ErrorDialog.tsx";
-import { useAsyncCallback } from "react-async-hook";
+import { Header } from "./Header.tsx";
+import { Sidebar } from "./Sidebar.tsx";
 
 export function AccountSettings() {
   const [loading, setLoading] = useState<boolean>(false);
