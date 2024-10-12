@@ -1,10 +1,7 @@
-import React from "react";
-import { Dialog } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { CommonText } from "./CommonText.tsx";
+import { Dialog } from "@mui/material";
+import React from "react";
 import { HistoricalDataPrice, tickerFields } from "../helpers.ts";
-import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { TickerDetailsLineWithArrow } from "./TickerDetailsLineWithArrow.tsx";
 
 type TickerDetailsProps = {

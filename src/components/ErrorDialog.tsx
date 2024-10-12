@@ -1,5 +1,5 @@
+import { Dialog } from "@mui/material";
 import React from "react";
-import { Card, Dialog } from "@mui/material";
 
 type ErrorDialogProps = {
   open: boolean;

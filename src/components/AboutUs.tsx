@@ -8,8 +8,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Carousel } from "react-responsive-carousel";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { sendReview } from "../api.ts";
 import { defaultDevsInfo, TokenManager } from "../helpers.ts";
-import { sendReview } from "../service/api.ts";
 import DefaultAlert from "./DefaultAlert.tsx";
 import { ErrorDialog } from "./ErrorDialog.tsx";
 import { Header } from "./Header.tsx";
@@ -131,7 +131,7 @@ export function AboutUs() {
             </div>
             {errors.rating && (
               <p className="text-red-500 text-center mt-2">
-                <>{errors.rating.message}</>
+                {errors.rating && <>{String(errors.rating.message)}</>}
               </p>
             )}
             <div>
@@ -160,7 +160,7 @@ export function AboutUs() {
               </label>
               {errors.description && (
                 <p className="text-red-500 text-center mt-2">
-                  <>{errors.description.message}</>
+                  <>{String(errors.description.message)}</>
                 </p>
               )}
               {loading ? (

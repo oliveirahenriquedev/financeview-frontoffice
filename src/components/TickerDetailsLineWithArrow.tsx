@@ -1,11 +1,8 @@
-import React from "react";
-import {
-  HistoricalDataPrice,
-  isGreaterOrEqualThanYesterday,
-} from "../helpers.ts";
-import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
+import React from "react";
+import { isGreaterOrEqualThanYesterday } from "../helpers.ts";
 
 type TickerDetailsLineWithArrowProps = {
   text: string;

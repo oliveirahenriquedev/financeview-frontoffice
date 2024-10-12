@@ -1,27 +1,23 @@
-import React, { useState } from "react";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
-  IconButton,
+  Collapse,
   Drawer,
+  IconButton,
   List,
   ListItem,
-  ListItemText,
-  ListItemIcon,
-  Collapse,
   ListItemButton,
-  useMediaQuery,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import LoginIcon from "@mui/icons-material/Login";
-import InfoIcon from "@mui/icons-material/Info";
-import { getCurrentUserData, TokenManager } from "../helpers.ts";
 import { jwtDecode } from "jwt-decode";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { TokenManager } from "../helpers.ts";
 
 export function Header() {
   const tokenManager = new TokenManager();

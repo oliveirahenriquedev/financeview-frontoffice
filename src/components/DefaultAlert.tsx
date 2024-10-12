@@ -1,7 +1,7 @@
-import * as React from "react";
-import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Alert from "@mui/material/Alert";
+import * as React from "react";
 
 type DefaultAlertProps = {
   message: string;

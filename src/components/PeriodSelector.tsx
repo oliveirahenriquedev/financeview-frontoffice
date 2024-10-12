@@ -1,5 +1,5 @@
-import React from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import React from "react";
 
 type PeriodSelectorProps = {
   value: string;

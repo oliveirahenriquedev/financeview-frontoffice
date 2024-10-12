@@ -1,8 +1,8 @@
 import { Autocomplete, Switch, TextField, useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
+import { getStocksInfo, listStocks } from "../api.ts";
 import { GetStockResponse, Period } from "../helpers.ts";
-import { getStocksInfo, listStocks } from "../service/api.ts";
 import { Chart } from "./Chart.tsx";
 import { CommonText } from "./CommonText.tsx";
 import { Header } from "./Header.tsx"; // Certifique-se de que o Header esteja importado

@@ -1,5 +1,5 @@
+import { Dialog, useMediaQuery } from "@mui/material";
 import React from "react";
-import { Card, Dialog, useMediaQuery } from "@mui/material";
 
 type NotAuthenticatedDialogProps = {
   open: boolean;

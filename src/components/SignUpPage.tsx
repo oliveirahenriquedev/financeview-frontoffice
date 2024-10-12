@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { createUser, getUser } from "../api.ts";
 import { setDelay, TokenManager } from "../helpers.ts";
-import { createUser, getUser } from "../service/api.ts";
 import { CommonText } from "./CommonText.tsx";
 import { ErrorDialog } from "./ErrorDialog.tsx";
 import { Header } from "./Header.tsx";
@@ -243,7 +243,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
                 />
                 {errors.name && (
                   <span className="text-red-500 text-sm">
-                    <>{errors.name.message}</>
+                    <>{errors.name.message?.toString()}</>
                   </span>
                 )}
               </label>
@@ -263,7 +263,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
               />
               {errors.email && (
                 <span className="text-red-500 text-sm">
-                  <>{errors.email.message}</>
+                  <>{errors.email.message?.toString()}</>
                 </span>
               )}
             </label>
@@ -282,7 +282,7 @@ export function SignUpPage({ wantToLogin = false }: SignUpPageProps) {
               />
               {errors.password && (
                 <span className="text-red-500 text-sm">
-                  <>{errors.password.message}</>
+                  <>{errors.password.message?.toString()}</>
                 </span>
               )}
             </label>

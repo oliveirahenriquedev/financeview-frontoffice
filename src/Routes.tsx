@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
-import { Chartspage } from "./components/Chartspage";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { App } from "./App";
+import { Chartspage } from "./components/Chartspage";
 
 export function DOMRoutes() {
   return (

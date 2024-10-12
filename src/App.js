@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import { Card } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import React from "react";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Importa o CSS da biblioteca
 import {
-  BrowserRouter as Router,
   Route,
+  BrowserRouter as Router,
   Routes,
   useNavigate,
 } from "react-router-dom";
-import { Avatar, Card, Rating } from "@mui/material";
-import { Chartspage } from "./components/Chartspage.tsx";
-import { SignUpPage } from "./components/SignUpPage.tsx";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // Importa o CSS da biblioteca
 import { AboutUs } from "./components/AboutUs.tsx";
 import { AccountSettings } from "./components/AccountSettings.tsx";
+import { Chartspage } from "./components/Chartspage.tsx";
+import { SignUpPage } from "./components/SignUpPage.tsx";
 import { TokenManager } from "./helpers.ts";
-import { jwtDecode } from "jwt-decode";
 
 const tokenManager = new TokenManager();
-function App() {
+export function App() {
   let user = undefined;
   if (tokenManager.getCurrentToken()) {
     user = jwtDecode(tokenManager.getCurrentToken());
@@ -23,7 +23,7 @@ function App() {
   const navigate = useNavigate();
 
   const handleButtonClick = async () => {
-    navigate("/chartspage"); // URL da página de exemplo
+    navigate("/chartspage");
   };
 
   return (
